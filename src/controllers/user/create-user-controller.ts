@@ -2,7 +2,7 @@ import { type Request, type Response } from "express";
 import { CreateUserService } from "../../services/create-user-service.js";
 import { createUserSchema } from "../../schemas/user-schema.js";
 
-export class CreateUserController {
+export default class CreateUserController {
   async handle(req: Request, res: Response): Promise<Response> {
     const { name, email, password, phone } = createUserSchema.parse(req).body;
 

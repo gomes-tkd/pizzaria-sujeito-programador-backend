@@ -31,6 +31,8 @@ export class CreateUserService {
         id: true,
         name: true,
         email: true,
+        phone: true,
+        role: true,
       },
     });
 
