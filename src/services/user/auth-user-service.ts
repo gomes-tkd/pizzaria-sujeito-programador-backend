@@ -1,7 +1,7 @@
 import { compare } from "bcryptjs";
 import jwt from "jsonwebtoken";
-import AppError from "../errors/app-errors.js";
-import prisma from "../prisma/index.js";
+import AppError from "../../errors/app-errors.js";
+import prisma from "../../prisma/index.js";
 
 interface IAuthUserServiceProps {
   email: string;

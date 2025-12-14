@@ -1,6 +1,6 @@
 import { hash } from "bcryptjs";
-import AppError from "../errors/app-errors.js";
-import prisma from "../prisma/index.js";
+import AppError from "../../errors/app-errors.js";
+import prisma from "../../prisma/index.js";
 
 interface ICreateUserProps {
   name: string;

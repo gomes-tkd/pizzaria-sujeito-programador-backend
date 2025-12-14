@@ -1,5 +1,5 @@
 import { type Request, type Response } from "express";
-import { CreateUserService } from "../../services/create-user-service.js";
+import { CreateUserService } from "../../services/user/create-user-service.js";
 import { createUserSchema } from "../../schemas/user-schema.js";
 
 export default class CreateUserController {
