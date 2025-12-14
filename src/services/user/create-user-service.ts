@@ -7,9 +7,10 @@ interface ICreateUserProps {
   email: string;
   password: string;
   phone: string;
+  role: "ADMIN" | "STAFF" | undefined;
 }
 export class CreateUserService {
-  async execute({ name, email, password, phone }: ICreateUserProps) {
+  async execute({ name, email, password, phone, role }: ICreateUserProps) {
     const userAlreadyExists = await prisma.user.findUnique({
       where: { email },
     });
@@ -26,6 +27,7 @@ export class CreateUserService {
         email,
         password: passwordHash,
         phone,
+        role: role || "STAFF",
       },
       select: {
         id: true,

@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 
 interface IPayload {
   sub: string;
+  role: string;
 }
 
 export default function isAuthenticated(
@@ -21,13 +22,14 @@ export default function isAuthenticated(
   const [, token] = authHeader.split(" ");
 
   try {
-    const { sub } = jwt.verify(
+    const { sub, role } = jwt.verify(
       token!,
       process.env.JWT_SECRET as string
     ) as IPayload;
 
     req.userId = sub;
-
+    req.role = role;
+    
     return next();
   } catch {
     res.status(401).json({ message: "Invalid token" });

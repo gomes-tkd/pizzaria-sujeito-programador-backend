@@ -12,6 +12,7 @@ interface IAuthResponse {
   id: string;
   name: string;
   email: string;
+  role: string;
   token: string;
 }
 
@@ -44,6 +45,7 @@ export default class AuthUserService {
       {
         name: user.name,
         email: user.email,
+        role: user.role,
       },
       process.env.JWT_SECRET,
       {
@@ -56,6 +58,7 @@ export default class AuthUserService {
       id: user.id,
       name: user.name,
       email: user.email,
+      role: user.role,
       token,
     };
   }

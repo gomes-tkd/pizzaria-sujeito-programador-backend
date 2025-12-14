@@ -4,7 +4,8 @@ import { createUserSchema } from "../../schemas/user-schema.js";
 
 export default class CreateUserController {
   async handle(req: Request, res: Response): Promise<Response> {
-    const { name, email, password, phone } = createUserSchema.parse(req).body;
+    const { name, email, password, phone, role } =
+      createUserSchema.parse(req).body;
 
     const createUserService = new CreateUserService();
 
@@ -13,6 +14,7 @@ export default class CreateUserController {
       email,
       password,
       phone,
+      role,
     });
 
     return res.status(201).json({

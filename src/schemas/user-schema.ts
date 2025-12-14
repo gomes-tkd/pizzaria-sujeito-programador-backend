@@ -28,6 +28,8 @@ export const createUserSchema = z.object({
       .regex(/[a-zA-Z]/, "Password must contain at least one letter")
       .regex(/\d/, "Password must contain at least one number")
       .regex(/[\W_]/, "Password must contain at least one special character"),
+
+    role: z.enum(["ADMIN", "STAFF"]).optional(),
   }),
 });
 
