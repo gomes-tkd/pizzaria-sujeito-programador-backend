@@ -1,5 +1,6 @@
 import { Router } from "express";
 import CreateCategoryController from "../controllers/category/create-category-controller.js";
+import ListCategoryController from "../controllers/category/list-category-controller.js";
 import { validateSchema } from "../middlewares/validate-schema.js";
 import { createCategorySchema } from "../schemas/category-schema.js";
 import isAuthenticated from "../middlewares/is-authenticated.js";
@@ -7,6 +8,7 @@ import isAdmin from "../middlewares/is-admin.js";
 
 const router = Router();
 const createCategoryController = new CreateCategoryController();
+const listCategoryController = new ListCategoryController();
 
 /**
  * @swagger
@@ -48,5 +50,27 @@ router.post(
   validateSchema(createCategorySchema),
   createCategoryController.handle
 );
+
+/**
+ * @swagger
+ * /categories:
+ *   get:
+ *     summary: Listar todas as categorias
+ *     tags: [Categories]
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       "200":
+ *         description: Lista de categorias
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: "#/components/schemas/Category"
+ *       "401":
+ *         $ref: "#/components/responses/Unauthorized"
+ */
+router.get("/", isAuthenticated, listCategoryController.handle);
 
 export default router;
