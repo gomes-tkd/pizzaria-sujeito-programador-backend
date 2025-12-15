@@ -5,7 +5,7 @@ import express, {
   type Response,
 } from "express";
 import cors from "cors";
-import { router } from "./routes.js";
+import { router } from "./routes/index.js";
 import { errorHandler } from "./middlewares/error-handler.js";
 
 const app = express();

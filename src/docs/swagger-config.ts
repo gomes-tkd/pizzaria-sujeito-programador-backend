@@ -1,4 +1,6 @@
+import { url } from "node:inspector";
 import swaggerJSDoc from "swagger-jsdoc";
+import { email } from "zod";
 
 const swaggerDefinition = {
   openapi: "3.0.0",
@@ -7,6 +9,11 @@ const swaggerDefinition = {
     version: "1.0.0",
     description:
       "Documentação completa dos endpoints para Cardápio, Pedidos, Autenticação de Clientes e Funcionários (Admin/Staff).",
+    contact: {
+      name: "José Gomes",
+      email: "jgomestkd@gmail.com",
+      url: "https://github.com/gomes-tkd",
+    },
   },
   tags: [
     {
@@ -189,7 +196,7 @@ const swaggerDefinition = {
 
 const options: swaggerJSDoc.Options = {
   swaggerDefinition,
-  apis: ["./src/routes.ts", "./src/controllers/**/*.ts"],
+  apis: ["./src/routes/**/*.ts", "./src/controllers/**/*.ts"],
 };
 
 const swaggerSpec = swaggerJSDoc(options);
