@@ -126,6 +126,21 @@ O banco de dados PostgreSQL possui as seguintes tabelas e relacionamentos princi
   - **Auth**: Requer token Bearer e Role ADMIN.
   - **Body**: `{ name }`
   - **Validação**: `createCategorySchema`
+- **GET** `/categories`: Lista todas as categorias.
+  - **Auth**: Requer token Bearer.
+
+### Produtos (`/products`)
+
+- **POST** `/products`: Cria um novo produto com upload de imagem.
+  - **Auth**: Requer token Bearer e Role ADMIN.
+  - **Content-Type**: `multipart/form-data`
+  - **Body**:
+    - `name`: string
+    - `description`: string
+    - `price`: string
+    - `category_id`: string (UUID)
+    - `file`: arquivo de imagem (banner)
+  - **Validação**: `createProductSchema`
 
 ## 6. Validação e Middlewares
 
