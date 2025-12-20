@@ -38,7 +38,7 @@ export const updateProductSchema = z.object({
 
 export const deleteProductSchema = z.object({
   params: z.object({
-    id: z.string().uuid("ID inválido"),
+    product_id: z.string().uuid("ID inválido"),
   }),
 });
 
@@ -51,8 +51,11 @@ export const getProductSchema = z.object({
 export const listProductsSchema = z.object({
   query: z.object({
     disabled: z
-      .enum(["true", "false"])
+      .enum(["true", "false"], {
+        message: "Disabled must be 'true' or 'false'",
+      })
       .optional()
+      .default("false")
       .transform((val) => val === "true"),
   }),
 });

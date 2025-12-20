@@ -8,7 +8,7 @@ export default class ListProductService {
   async execute({ disabled }: ListProductServiceProps) {
     const products = await prisma.product.findMany({
       where: {
-        disabled: disabled,
+        disabled: (disabled === true) ? true : false,
       },
       select: {
         id: true,
