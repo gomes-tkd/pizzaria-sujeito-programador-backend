@@ -44,4 +44,14 @@ export const finishOrderSchema = z.object({
   }),
 });
 
+export const removeOrderSchema = z.object({
+  query: z.object({
+    order_id: z
+      .string({ message: "Order ID is required" })
+      .trim()
+      .uuid("Invalid Order ID format"),
+    name: z.string({ message: "Order Name is required" }).trim(),
+  }),
+});
+
 export const listOrdersSchema = z.object({});

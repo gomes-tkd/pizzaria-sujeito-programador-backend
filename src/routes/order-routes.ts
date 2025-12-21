@@ -4,6 +4,7 @@ import AddItemOrderController from "../controllers/order/add-item-order-controll
 import RemoveItemController from "../controllers/order/remove-order-item-controller.js";
 import ListOrdersController from "../controllers/order/list-order-controller.js";
 import DetailOrderController from "../controllers/order/detail-order-controller.js";
+import DeleteOrderController from "../controllers/order/delete-order-controller.js";
 import SendOrderController from "../controllers/order/send-order-controller.js";
 import isAuthenticated from "../middlewares/is-authenticated.js";
 import { validateSchema } from "../middlewares/validate-schema.js";
@@ -13,6 +14,7 @@ import {
   detailOrderSchema,
   sendOrderSchema,
   finishOrderSchema,
+  removeOrderSchema,
 } from "../schemas/order-schema.js";
 import FinishOrderController from "../controllers/order/finish-order-controller.js";
 
@@ -25,6 +27,8 @@ const removeItemController = new RemoveItemController();
 const detailOrderController = new DetailOrderController();
 const sendOrderController = new SendOrderController();
 const finishOrderController = new FinishOrderController();
+const removeOrderController = new DeleteOrderController();
+
 /**
  * @swagger
  * /orders:
@@ -155,6 +159,13 @@ orderRoutes.put(
   isAuthenticated,
   validateSchema(finishOrderSchema),
   finishOrderController.handle
+);
+
+orderRoutes.delete(
+  "/",
+  isAuthenticated,
+  validateSchema(removeOrderSchema),
+  removeOrderController.handle
 );
 
 export default orderRoutes;
