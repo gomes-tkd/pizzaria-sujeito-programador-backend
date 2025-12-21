@@ -1,17 +1,24 @@
 import { Router } from "express";
 import CreateOrderController from "../controllers/order/create-order-controller.js";
 import AddItemOrderController from "../controllers/order/add-item-order-controller.js";
+import RemoveItemController from "../controllers/order/remove-order-item-controller.js";
 import ListOrdersController from "../controllers/order/list-order-controller.js";
+import DetailOrderController from "../controllers/order/detail-order-controller.js";
 import isAuthenticated from "../middlewares/is-authenticated.js";
 import { validateSchema } from "../middlewares/validate-schema.js";
-import { createOrderSchema } from "../schemas/order-schema.js";
-import isAdmin from "../middlewares/is-admin.js";
+import {
+  createOrderSchema,
+  removeOrderItemSchema,
+  detailOrderSchema,
+} from "../schemas/order-schema.js";
 
 const orderRoutes = Router();
 
 const createOrderController = new CreateOrderController();
 const listOrdersController = new ListOrdersController();
 const addItemToOrderController = new AddItemOrderController();
+const removeItemController = new RemoveItemController();
+const detailOrderController = new DetailOrderController();
 
 /**
  * @swagger
@@ -73,8 +80,62 @@ orderRoutes.post(
  *   "403":
  *     $ref: "#/components/responses/Forbidden"
  */
-orderRoutes.get("/orders", isAuthenticated, listOrdersController.handle);
+orderRoutes.get("/", isAuthenticated, listOrdersController.handle);
 
 orderRoutes.post("/add-item", isAuthenticated, addItemToOrderController.handle);
+
+/**
+ * @swagger
+ * /order/remove:
+ *   delete:
+ *     summary: Remove um item do pedido
+ *     tags: [Order]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: itemId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID do item a ser removido
+ *     responses:
+ *       "200":
+ *         description: Item removido com sucesso
+ *       "400":
+ *         description: Item não encontrado
+ */
+orderRoutes.delete(
+  "/remove",
+  isAuthenticated,
+  validateSchema(removeOrderItemSchema),
+  removeItemController.handle
+);
+
+/**
+ * @swagger
+ * /order/detail:
+ *   get:
+ *     summary: Detalhes do pedido
+ *     tags: [Order]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: order_id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID do pedido
+ *     responses:
+ *       "200":
+ *         description: Detalhes do pedido
+ */
+orderRoutes.get(
+  "/detail",
+  isAuthenticated,
+  validateSchema(detailOrderSchema),
+  detailOrderController.handle
+);
 
 export default orderRoutes;

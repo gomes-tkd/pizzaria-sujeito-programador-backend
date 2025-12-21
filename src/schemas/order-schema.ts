@@ -5,7 +5,22 @@ export const createOrderSchema = z.object({
     table: z.number({ message: "Table is required" }).int().positive(),
     name: z.string().optional(),
   }),
-  // query: z.object({
-  //   category_id: z.string({ message: "Category ID is required" }),
-  // }),
+});
+
+export const removeOrderItemSchema = z.object({
+  query: z.object({
+    itemId: z
+      .string({ message: "Item ID is required" })
+      .trim()
+      .uuid("Invalid Item ID format"),
+  }),
+});
+
+export const detailOrderSchema = z.object({
+  query: z.object({
+    order_id: z
+      .string({ message: "Order ID is required" })
+      .trim()
+      .uuid("Invalid Order ID format"),
+  }),
 });

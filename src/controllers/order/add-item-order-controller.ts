@@ -1,16 +1,21 @@
 import { type Request, type Response } from "express";
-import AddItemOrderService from "../../services/order/add-item-order-service.js";
+import AddItemService from "../../services/order/add-item-order-service.js";
+import AppError from "../../errors/app-errors.js";
 
 export default class AddItemOrderController {
   async handle(req: Request, res: Response) {
-    const { orderId, productId, quantity } = req.body;
+    const { orderId, productId, amount } = req.body;
 
-    const addItemOrderService = new AddItemOrderService();
+    const addItemService = new AddItemService();
 
-    const orderItem = await addItemOrderService.execute({
+    if (!amount) {
+      throw new AppError("Quantidade (amount) é obrigatória.");
+    }
+
+    const orderItem = await addItemService.execute({
       orderId,
       productId,
-      quantity,
+      amount: Number(amount),
     });
 
     return res.status(201).json(orderItem);

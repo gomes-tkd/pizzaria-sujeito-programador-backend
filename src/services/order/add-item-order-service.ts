@@ -1,49 +1,45 @@
-import { ca } from "zod/v4/locales";
-import prisma from "../../prisma/index.js";
+import prismaClient from "../../prisma/index.js";
 import AppError from "../../errors/app-errors.js";
 
-interface OrderItemProps {
+interface AddItemRequest {
   orderId: string;
   productId: string;
-  quantity: number;
+  amount: number;
 }
 
-export default class AddItemOrderController {
-  async execute({ orderId, productId, quantity }: OrderItemProps) {
+export default class AddItemService {
+  async execute({ orderId, productId, amount }: AddItemRequest) {
+    const product = await prismaClient.product.findFirst({
+      where: {
+        id: productId,
+        disabled: false,
+      },
+    });
+
+    if (!product) {
+      throw new AppError("Produto não encontrado ou indisponível.");
+    }
+
+    const orderExists = await prismaClient.order.findUnique({
+      where: { id: orderId },
+    });
+
+    if (!orderExists) {
+      throw new AppError("Pedido não encontrado.");
+    }
+
     try {
-      const isOrderExists = await prisma.order.findFirst({
-        where: {
-          id: orderId,
-        },
-      });
-
-      if (!isOrderExists) {
-        throw new AppError("Order not found");
-      }
-
-      const isProductExists = await prisma.product.findFirst({
-        where: {
-          id: productId,
-          disabled: false,
-        },
-      });
-
-      if (!isProductExists) {
-        throw new AppError("Product not found");
-      }
-
-      const orderItem = await prisma.orderItem.create({
+      const item = await prismaClient.item.create({
         data: {
-          orderId,
-          productId,
-          quantity,
+          orderId: orderId,
+          productId: productId,
+          amount: amount, 
         },
         select: {
           id: true,
-          quantity: true,
+          amount: true,
           orderId: true,
           productId: true,
-          createdAt: true,
           product: {
             select: {
               id: true,
@@ -56,11 +52,10 @@ export default class AddItemOrderController {
         },
       });
 
-      return orderItem;
-    } catch (error) {
-      throw new AppError(
-        "Error adding item to order: " + (error as Error).message
-      );
+      return item;
+    } catch (err) {
+      console.error(err);
+      throw new AppError("Erro ao adicionar item ao pedido.");
     }
   }
 }

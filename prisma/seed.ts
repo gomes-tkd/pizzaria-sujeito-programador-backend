@@ -1,4 +1,3 @@
-import "dotenv/config";
 import { PrismaClient, Role, OrderStatus } from "@prisma/client";
 import { hash } from "bcryptjs";
 
@@ -162,10 +161,11 @@ const bebidas = [
 ];
 
 async function main() {
-  console.log("🔥 Iniciando Seed Completo e Volumoso...");
+  console.log("🔥 Iniciando Seed Adaptado...");
 
   const passwordHash = await hash("123456", 8);
-  const admin = await prisma.user.upsert({
+
+  await prisma.user.upsert({
     where: { email: "admin@pizzaria.com" },
     update: {},
     create: {
@@ -176,6 +176,7 @@ async function main() {
       role: Role.ADMIN,
     },
   });
+
   await prisma.user.upsert({
     where: { email: "garcom@pizzaria.com" },
     update: {},
@@ -249,20 +250,7 @@ async function main() {
   const randomInt = (min: number, max: number) =>
     Math.floor(Math.random() * (max - min + 1)) + min;
 
-  const tables = [
-    "01",
-    "02",
-    "03",
-    "04",
-    "05",
-    "06",
-    "10",
-    "11",
-    "12",
-    "15",
-    "20",
-    "22",
-  ];
+  const tables = [1, 2, 3, 4, 5, 6, 10, 11, 12, 15, 20, 22];
 
   console.log("📝 Gerando pedidos aleatórios...");
 
@@ -274,12 +262,12 @@ async function main() {
       Math.random() > 0.5 ? OrderStatus.WAITING : OrderStatus.IN_PRODUCTION;
 
     const itemsCount = randomInt(1, 4);
-    const orderItems = [];
+    const orderItemsList = [];
 
     for (let j = 0; j < itemsCount; j++) {
       const prod = randomProduct();
-      orderItems.push({
-        quantity: randomInt(1, 3),
+      orderItemsList.push({
+        amount: randomInt(1, 3),
         productId: prod.id,
       });
     }
@@ -291,7 +279,7 @@ async function main() {
           status: status,
           draft: false,
           name: `Cliente Mesa ${table}`,
-          orderItems: { create: orderItems },
+          items: { create: orderItemsList },
         },
       })
     );
@@ -299,13 +287,13 @@ async function main() {
 
   for (let i = 0; i < 15; i++) {
     const table = tables[randomInt(0, tables.length - 1)];
-    const itemsCount = randomInt(1, 6); // Pedidos maiores
-    const orderItems = [];
+    const itemsCount = randomInt(1, 6);
+    const orderItemsList = [];
 
     for (let j = 0; j < itemsCount; j++) {
       const prod = randomProduct();
-      orderItems.push({
-        quantity: randomInt(1, 2),
+      orderItemsList.push({
+        amount: randomInt(1, 2),
         productId: prod.id,
       });
     }
@@ -317,8 +305,7 @@ async function main() {
           status: OrderStatus.DONE,
           draft: false,
           name: `Cliente Antigo ${i + 1}`,
-
-          orderItems: { create: orderItems },
+          items: { create: orderItemsList },
         },
       })
     );
