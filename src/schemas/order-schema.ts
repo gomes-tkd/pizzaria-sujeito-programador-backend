@@ -24,3 +24,13 @@ export const detailOrderSchema = z.object({
       .uuid("Invalid Order ID format"),
   }),
 });
+
+export const sendOrderSchema = z.object({
+  body: z.object({
+    name: z.string({ message: "Name is required" }).trim(),
+    order_id: z
+      .string({ message: "Order ID is required" })
+      .trim()
+      .uuid("Invalid Order ID format"),
+  }),
+});
