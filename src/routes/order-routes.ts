@@ -12,7 +12,9 @@ import {
   removeOrderItemSchema,
   detailOrderSchema,
   sendOrderSchema,
+  finishOrderSchema,
 } from "../schemas/order-schema.js";
+import FinishOrderController from "../controllers/order/finish-order-controller.js";
 
 const orderRoutes = Router();
 
@@ -22,7 +24,7 @@ const addItemToOrderController = new AddItemOrderController();
 const removeItemController = new RemoveItemController();
 const detailOrderController = new DetailOrderController();
 const sendOrderController = new SendOrderController();
-
+const finishOrderController = new FinishOrderController();
 /**
  * @swagger
  * /orders:
@@ -146,6 +148,13 @@ orderRoutes.put(
   isAuthenticated,
   validateSchema(sendOrderSchema),
   sendOrderController.handle
+);
+
+orderRoutes.put(
+  "/finish",
+  isAuthenticated,
+  validateSchema(finishOrderSchema),
+  finishOrderController.handle
 );
 
 export default orderRoutes;

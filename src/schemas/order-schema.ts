@@ -34,3 +34,14 @@ export const sendOrderSchema = z.object({
       .uuid("Invalid Order ID format"),
   }),
 });
+
+export const finishOrderSchema = z.object({
+  body: z.object({
+    order_id: z
+      .string({ message: "Order ID is required" })
+      .trim()
+      .uuid("Invalid Order ID format"),
+  }),
+});
+
+export const listOrdersSchema = z.object({});
